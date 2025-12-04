@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 import java.util.Optional;
 
-@Controller // Registers this as a GraphQL handler
+@Controller
 public class ProductGraphQLController {
 
     private final ProductService productService;
@@ -21,13 +21,13 @@ public class ProductGraphQLController {
 
     // --- QUERIES ---
 
-    // Matches 'allProducts' in schema.graphqls
+    // 'allProducts'
     @QueryMapping
     public List<Product> allProducts() {
         return productService.findAll();
     }
 
-    // Matches 'productById' in schema.graphqls
+    // 'productById'
     @QueryMapping
     public Optional<Product> productById(@Argument Long id) {
         return productService.findById(id);
@@ -35,15 +35,14 @@ public class ProductGraphQLController {
 
     // --- MUTATIONS ---
 
-    // Matches 'createProduct' in schema.graphqls
+    // 'createProduct'
     @MutationMapping
     public Product createProduct(@Argument String name, @Argument Double price) {
-        // ID is null because the service handles auto-increment logic
         Product newProduct = new Product(null, name, price);
         return productService.save(newProduct);
     }
 
-    // Matches 'updateProduct' in schema.graphqls
+    // 'updateProduct'
     @MutationMapping
     public Product updateProduct(@Argument Long id, @Argument String name, @Argument Double price) {
         Product productDetails = new Product(null, name, price);
@@ -51,7 +50,7 @@ public class ProductGraphQLController {
         return updated.orElse(null); // Return null if ID not found (GraphQL handles nulls gracefully)
     }
 
-    // Matches 'deleteProduct' in schema.graphqls
+    // 'deleteProduct'
     @MutationMapping
     public Boolean deleteProduct(@Argument Long id) {
         return productService.delete(id);
