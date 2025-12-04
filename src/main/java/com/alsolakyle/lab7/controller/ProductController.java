@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController // Stereotype annotation for the controller [cite: 250]
-@RequestMapping("/api/products") // Base path [cite: 251]
+@RestController
+@RequestMapping("/api/products") // Base path
 public class ProductController {
 
     private final ProductService productService;
@@ -20,13 +20,13 @@ public class ProductController {
         this.productService = productService;
     }
 
-    // 1. READ ALL - Return 200 OK [cite: 255, 263]
+    // 1. READ ALL - Return 200 OK
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
         return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
     }
 
-    // 2. READ ONE - Return 200 OK or 404 Not Found [cite: 255, 268]
+    // 2. READ ONE - Return 200 OK or 404 Not Found
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         Optional<Product> product = productService.findById(id);
@@ -38,14 +38,14 @@ public class ProductController {
         }
     }
 
-    // 3. CREATE - Return 201 Created [cite: 255, 273]
+    // 3. CREATE - Return 201 Created
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product createdProduct = productService.save(product);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }
 
-    // 4. UPDATE - Return 200 OK or 404 Not Found [cite: 255, 278]
+    // 4. UPDATE - Return 200 OK or 404 Not Found
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
         Optional<Product> updatedProduct = productService.update(id, productDetails);
@@ -57,12 +57,12 @@ public class ProductController {
         }
     }
 
-    // 5. DELETE - Return 200 OK (or 204 No Content) [cite: 255]
+    // 5. DELETE - Return 200 OK (or 204 No Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         boolean deleted = productService.delete(id);
         if (deleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 is standard for delete
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
